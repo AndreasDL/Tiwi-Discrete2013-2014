@@ -8,6 +8,10 @@ int maxaantal = priem;
 vector<int> fix(2);
 
 vector<int> ontbind(int getal);
+vector<int> maal(const vector<int> &een,const vector<int> &twee);
+vector<int> telOp(const vector<int> &een,const vector<int> &twee);
+vector<int> maalAlfa(const vector<int> &een);
+vector<int> maalGetal(const vector<int> &een,const int getal);
 void plusTab();
 void maalTab();
 
@@ -19,6 +23,60 @@ int main(int argc, char** argv){
 	fix[1] = 2;
 	//plusTab();
 	maalTab();
+}
+
+void plusTab(){
+	for (int i = 0 ; i < maxaantal; i++){
+		for (int j = 0 ; j < maxaantal; j++){
+			//i+j
+			//omzetten
+			vector<int> een = ontbind(i);
+			vector<int> twee = ontbind(j);
+			vector<int> temp = telOp(een,twee);
+			//uitschrijven
+			cout << i  << " + " << j << " = ";
+			for (int i =0 ; i < temp.size() ; i++){
+				cout << temp[i] << " ";
+			}
+			cout << endl;
+		}
+	}
+}
+void maalTab(){
+	for (int i = 0 ; i < maxaantal ; i++){
+		for (int j = 0 ; j < maxaantal ; j++){
+			cout << i << " * " << j <<  " = ";
+			//ontbind
+			vector<int> een = ontbind(i);
+			vector<int> twee = ontbind(j);
+			//bereken
+			vector<int> result = maal(een,twee);
+
+			//machten fixen
+			vector<int> temp(fix);
+			for (int t = 2*macht ; t >macht ; t--){
+				//omzetten naar verschuifregel x^4 = x*x^3 of x^6 = x^3 *x*x*x
+				for (int aantalVerschuivingen = 0; aantalVerschuivingen < t - macht; aantalVerschuivingen++){
+					temp = maalAlfa(temp);
+				}
+				//coeff
+				temp = maalGetal(temp,result[t]);
+				cout << "\ttussen";
+				for (int x=0; x < temp.size() ; x++){
+					cout << temp[x] << " ";
+				}
+				cout << endl;
+				//optellen
+				result[t] = 0;
+				telOp(result,temp);
+			}
+
+			for (int k = 0 ; k < result.size() ; k++){
+				cout << result[k] << " ";
+			}
+			cout << endl;
+		}
+	}
 }
 
 vector<int> ontbind(int getal){
@@ -34,64 +92,50 @@ vector<int> ontbind(int getal){
 		result[t] = rest;
 		t--;
 	}
-	/*
-	for (int i = 0 ; i < macht;i++){
-		//cout << result[i] << " ";
-	}
-	//cout << endl << endl;*/
 	return result;
 }
-void plusTab(){
-	for (int i = 0 ; i < maxaantal; i++){
-		for (int j = 0 ; j < maxaantal; j++){
-			//i+j
-			//omzetten
-			vector<int> een = ontbind(i);
-			vector<int> twee = ontbind(j);
-
-			//optellen & per dim rest berekenen
-			//cout << i << " + " << j << " = ";
-			for (int t = 0 ; t < macht ; t++){
-				een[t] += twee[t];
-				een[t] %= priem;
-				cout << een[t] << " ";
-			}
-			cout << "\t";
+vector<int> telOp(const vector<int> &een,const vector<int> &twee){
+	//optellen & per dim rest berekenen
+	if (een.size() < twee.size()){
+		return telOp(twee,een);
+	}else{//een is grootste tabel
+		vector<int> result(een);//result = copy van een
+		for (int t = een.size() - twee.size() ; t < een.size() ; t++){
+			result[t] += twee[t];
+			result[t] %= priem;
 		}
-		cout << endl;
+		return result;
 	}
 }
-void maalTab(){
-	for (int i = 0 ; i < maxaantal ; i++){
-		for (int j = 0 ; j < maxaantal ; j++){
-			//ontbind
-			vector<int> een = ontbind(i);
-			vector<int> twee = ontbind(j);
-			vector<int> result(2*macht);
-			for (int t = 0 ; t < 2*macht; t++){
-				result[t] = 0;
-			}
-			//maal
-			cout << i << " x " << j << " = ";
-			for (int teen=0 ; teen < macht ; teen++){
-				for (int ttwee=0 ; ttwee < macht ; ttwee++){
-					result[teen+ttwee]= een[teen] * twee[ttwee];
-					result[teen+ttwee] %= priem;
-					cout << result[teen+ttwee] << " ";
-				}
-			}
-			cout << endl;
-			//fix grotere machten weg
-			for (int t = 2*macht ; t >macht ; t--){
-				//schuif
-				vector<int> hulp(fix);//copy
-				//maal
-				for (int u = 0 ; u <= macht;u++){
-					hulp[u] *= result[t];
-				}
-				result[<t] = result[t]*fix 
-				//optellen
-			}
+vector<int> maal(const vector<int> &een,const vector<int> &twee){
+	vector<int> result(2*macht);
+	for (int t = 0 ; t < 2*macht; t++){
+		result[t] = 0;
+	}
+	//maal
+	for (int teen=0 ; teen < macht ; teen++){
+		for (int ttwee=0 ; ttwee < macht ; ttwee++){
+			result[teen+ttwee]= een[teen] * twee[ttwee];
+			result[teen+ttwee] %= priem;
 		}
 	}
+	return result;
+}
+vector<int> maalAlfa(const vector<int> & een){
+	//resizen ipv 0 te zetten!!
+	vector<int> result(een.size()+1);
+
+	for (int i = 0 ; i < een.size() ; i++){
+		result[i+1] = een[i];
+	}
+	result[0] = 0;
+	return result;
+}
+vector<int> maalGetal(const vector<int> &een,const int getal){
+	vector<int> result(een);
+	for(int i= 0 ; i < een.size(); i++){
+		result[i] *= getal;
+		result[i] %= priem;
+	}
+	return result;
 }
