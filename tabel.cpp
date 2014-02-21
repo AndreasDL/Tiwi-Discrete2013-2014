@@ -95,7 +95,8 @@ vector<int> ontbind(int getal){
 	return result;
 }
 vector<int> telOp(const vector<int> &een,const vector<int> &twee){
-	//optellen & per dim rest berekenen
+	//optellen & per dim rest berekenen vectoren moet niet evengroot zijn
+
 	if (een.size() < twee.size()){
 		return telOp(twee,een);
 	}else{//een is grootste tabel
@@ -108,6 +109,7 @@ vector<int> telOp(const vector<int> &een,const vector<int> &twee){
 	}
 }
 vector<int> maal(const vector<int> &een,const vector<int> &twee){
+	//vector een maal vector 2 berekenen, resultaat eeft macht = originelemacht *2
 	vector<int> result(2*macht);
 	for (int t = 0 ; t < 2*macht; t++){
 		result[t] = 0;
@@ -122,13 +124,16 @@ vector<int> maal(const vector<int> &een,const vector<int> &twee){
 	return result;
 }
 vector<int> maalAlfa(const vector<int> & een){
-	//resizen ipv 0 te zetten!!
+	//maal alfa doen => macht is eentje groter
+	//resizen ipv 0 te zetten!! => zelfde size dus gwn kopie maken dan :o
 	vector<int> result(een.size()+1);
 
 	for (int i = 0 ; i < een.size() ; i++){
-		result[i+1] = een[i];
+		result[i] = een[i];
 	}
-	result[0] = 0;
+	//result[0] = 0; 
+	result[result.size()-1] = 0;// -> moet nul niet achteraan ipv vooraan ?
+
 	return result;
 }
 vector<int> maalGetal(const vector<int> &een,const int getal){
