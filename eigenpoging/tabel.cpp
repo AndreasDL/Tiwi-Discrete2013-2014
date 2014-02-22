@@ -3,10 +3,10 @@
 #include <stack>
 using namespace std;
 
-int priem = 3;
-int macht = 2;
+int priem = 2;
+int macht = 3;
 int maxaantal = priem;//macht uitrekenen in main
-vector<int> fix(2);
+vector<int> fix(3);
 
 void print(const vector<int> &t);
 vector<int> ontbind(int getal);
@@ -21,18 +21,19 @@ int main(int argc, char** argv){
 	for (int i = 1 ; i < macht ; i++){
 		maxaantal *= priem;
 	}
-	fix[0] = 0;
-	fix[1] = 2;
+	fix[0] = 1;
+	fix[1] = 0;
+	fix[2] = 1;
 	//plusTab();
 	maalTab();
 }
 
 void plusTab(){
 	for (int i = 0 ; i < maxaantal; i++){
+		vector<int> een = ontbind(i);
 		for (int j = 0 ; j < maxaantal; j++){
 			//i+j
 			//omzetten
-			vector<int> een = ontbind(i);
 			vector<int> twee = ontbind(j);
 			vector<int> temp = telOp(een,twee);
 			//uitschrijven
@@ -41,52 +42,26 @@ void plusTab(){
 				cout << temp[i] << " ";
 			}
 			cout << endl;
-		}
+0		}
 	}
 }
 void maalTab(){
 	for (int i = 0 ; i < maxaantal ; i++){
+		vector<int> een = ontbind(i);
 		for (int j = 0 ; j < maxaantal ; j++){
 			cout << i << " * " << j <<  " = ";
 			//ontbind
-			vector<int> een = ontbind(i);
 			vector<int> twee = ontbind(j);
 			//bereken
 			vector<int> result = maal(een,twee);
-			cout << "\tResult: \t";
-			print(result);
-			cout << endl;
-
-			//machten fixen
-			vector<int> temp(fix);
-			for (int t = 2*macht ; t >macht ; t--){
-				cout << "\tmacht: " << t << "\t";
-				print(temp);
-				cout << endl;
-				//omzetten naar verschuifregel x^4 = x*x^3 of x^6 = x^3 *x*x*x
-				for (int aantalVerschuivingen = 0; aantalVerschuivingen < t - macht; aantalVerschuivingen++){
-					cout << "\tVerschuif: " << aantalVerschuivingen << "\t";
-					temp = maalAlfa(temp);
-					print(temp);
-					cout << endl;
-				}
-				//coeff
-				temp = maalGetal(temp,result[t]);
-				cout << "\tcoef:"<<result[t]<<"\t";
-				print(temp);
-				cout << endl;
-				//optellen
-				result[t] = 0;
-				telOp(result,temp);
-			}
-
+			cout << "\t";
 			print(result);
 			cout << endl;
 		}
 	}
 }
-
 vector<int> ontbind(int getal){
+	//getal omzetten naar { 1 , 0 ,2 } notatie
 	vector<int> result(macht);
 	for (int i = 0 ; i < macht; i++){
 		result[i] = 0;
@@ -117,16 +92,38 @@ vector<int> telOp(const vector<int> &een,const vector<int> &twee){
 }
 vector<int> maal(const vector<int> &een,const vector<int> &twee){
 	//vector een maal vector 2 berekenen, resultaat eeft macht = originelemacht *2
-	vector<int> result(2*macht);
-	for (int t = 0 ; t < 2*macht; t++){
+	vector<int> result(2*(macht-1)); //2* (macht-1) en niet 2*macht ?!
+	for (int t = 0 ; t < result.size(); t++){
 		result[t] = 0;
 	}
 	//maal
-	for (int teen=0 ; teen < macht ; teen++){
-		for (int ttwee=0 ; ttwee < macht ; ttwee++){
-			result[teen+ttwee]= een[teen] * twee[ttwee];
+	for (int teen=0 ; teen < een.size() ; teen++){
+		for (int ttwee=0 ; ttwee < twee.size() ; ttwee++){
+			result[teen+ttwee] += een[teen] * twee[ttwee];
 			result[teen+ttwee] %= priem;
 		}
+	}
+
+	//machten fixen
+	for (int t = 2*(macht-1) ; t >= macht ; t--){
+		//grotere machten lopen van t = 2*macht-1 tot macht
+		vector<int> temp(fix);//verschuifregel kopieren
+		//coeff
+		for (int i =0 ; i < temp.size() ; i++){
+			temp[i] *= result[0];//t moet op nul beginnen
+			temp[i] %= priem;
+		}
+
+		//omzetten naar verschuifregel x^4 = x*x^3 of x^6 = x^3 *x*x*x
+		for (int aantal = t-macht; aantal > 0; aantal--){
+			temp = maalAlfa(temp);
+		}
+
+		//result[0] moet weg
+		result.erase(result.begin());
+		//result[t] = 0; //coef van t is nu nul
+		//optellen
+		telOp(result,temp);
 	}
 	return result;
 }
@@ -134,20 +131,10 @@ vector<int> maalAlfa(const vector<int> & een){
 	//maal alfa doen => macht is eentje groter
 	//resizen ipv 0 te zetten!! => zelfde size dus gwn kopie maken dan :o
 	vector<int> result(een.size()+1);
-
 	for (int i = 0 ; i < een.size() ; i++){
 		result[i] = een[i];
 	}
-	result[result.size()-1] = 0;// -> moet nul niet achteraan ipv vooraan ?
-
-	return result;
-}
-vector<int> maalGetal(const vector<int> &een,const int getal){
-	vector<int> result(een);
-	for(int i= 0 ; i < een.size(); i++){
-		result[i] *= getal;
-		result[i] %= priem;
-	}
+	result[een.size()] = 0;
 	return result;
 }
 void print(const vector<int> &t){
