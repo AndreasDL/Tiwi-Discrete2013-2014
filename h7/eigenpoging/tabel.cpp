@@ -42,7 +42,7 @@ void plusTab(){
 				cout << temp[i] << " ";
 			}
 			cout << endl;
-0		}
+		}
 	}
 }
 void maalTab(){
@@ -92,7 +92,7 @@ vector<int> telOp(const vector<int> &een,const vector<int> &twee){
 }
 vector<int> maal(const vector<int> &een,const vector<int> &twee){
 	//vector een maal vector 2 berekenen, resultaat eeft macht = originelemacht *2
-	vector<int> result(2*(macht-1)); //2* (macht-1) en niet 2*macht ?!
+	vector<int> result(2*macht-1); //2* (macht-1) en niet 2*macht ?!
 	for (int t = 0 ; t < result.size(); t++){
 		result[t] = 0;
 	}

@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-bool uitdrukking(const bool p, const bool q , bool r);
 bool alsdan(const bool p, const bool q);
 
 int main(int argc, char** argv){
@@ -39,9 +38,6 @@ int main(int argc, char** argv){
 	return 0;
 }
 
-bool uitdrukking(const bool p,const bool q,const bool r){
-
-}
 bool alsdan(const bool p,const bool q){
 	return q || !(p||q);
 }
