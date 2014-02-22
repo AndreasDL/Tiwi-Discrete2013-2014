@@ -1,12 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <iomanip>
 using namespace std;
 
 int priem = 2;
 int macht = 3;
 int maxaantal = priem;//macht uitrekenen in main
-vector<int> fix(3);
+vector<int> fix;
 
 void print(const vector<int> &t);
 vector<int> ontbind(int getal);
@@ -21,15 +22,35 @@ int main(int argc, char** argv){
 	for (int i = 1 ; i < macht ; i++){
 		maxaantal *= priem;
 	}
-	fix[0] = 1;
-	fix[1] = 0;
-	fix[2] = 1;
-	//plusTab();
+	cout << "priem ?";
+	cin >> priem;
+	cout << "macht ?";
+	cin >> macht;
+	cout << endl;
+
+	cout << "verschuifregel?";
+	fix.resize(macht);
+	int t;
+	for (int i = 0 ; i < macht; i++){
+		cin >> t;
+		fix.push_back(t);
+	}
+
+	plusTab();
+	cout << endl;
 	maalTab();
 }
 
 void plusTab(){
+	cout << "Plustabel"<< endl;
+	cout << setw(6) << "+" << " |";
+	for (int i =0 ; i < maxaantal ; i++){
+		cout << setw(6) << i << " |";
+	}
+	cout << endl;
+
 	for (int i = 0 ; i < maxaantal; i++){
+		cout << setw(6) << i << " | ";
 		vector<int> een = ontbind(i);
 		for (int j = 0 ; j < maxaantal; j++){
 			//i+j
@@ -37,27 +58,33 @@ void plusTab(){
 			vector<int> twee = ontbind(j);
 			vector<int> temp = telOp(een,twee);
 			//uitschrijven
-			cout << i  << " + " << j << " = ";
-			for (int i =0 ; i < temp.size() ; i++){
-				cout << temp[i] << " ";
-			}
-			cout << endl;
+			//cout << i  << " + " << j << " = ";
+			print(temp);
+			cout << "| ";
 		}
+		cout << endl;
 	}
 }
 void maalTab(){
+	cout << "Maaltabel"<< endl;
+	cout << setw(6) << "x" << " |";
+	for (int i =0 ; i < maxaantal ; i++){
+		cout << setw(6) << i << " |";
+	}
+	cout << endl;
+
 	for (int i = 0 ; i < maxaantal ; i++){
+		cout << setw(6) << i << " | ";
 		vector<int> een = ontbind(i);
 		for (int j = 0 ; j < maxaantal ; j++){
-			cout << i << " * " << j <<  " = ";
 			//ontbind
 			vector<int> twee = ontbind(j);
 			//bereken
 			vector<int> result = maal(een,twee);
-			cout << "\t";
 			print(result);
-			cout << endl;
+			cout << "| ";
 		}
+		cout << endl;
 	}
 }
 vector<int> ontbind(int getal){
