@@ -22,23 +22,23 @@ int main(int argc, char** argv){
 	for (int i = 1 ; i < macht ; i++){
 		maxaantal *= priem;
 	}
-	/*cout << "priem ?";
+	cout << "priem ?";
 	cin >> priem;
 	cout << "macht ?";
 	cin >> macht;
 	cout << endl;
 
-	cout << "verschuifregel?";*/
+	cout << "verschuifregel?";
 	fix.resize(macht);
 	fix[0] = 1;
 	fix[1] = 0;
 	fix[2] = 1;
 
-	/*int t;
+	int t;
 	for (int i = 0 ; i < macht; i++){
 		cin >> t;
-		fix[i] = t;
-	}*/
+		fix.push_back(t);
+	}
 
 	plusTab();
 	cout << endl;
@@ -134,12 +134,11 @@ vector<int> maal(const vector<int> &een,const vector<int> &twee){
 			result[teen+ttwee] %= priem;
 		}
 	}
-	
 	//machten fixen
 	for (int t = 2*(macht-1) ; t >= macht ; t--){
 		//grotere machten lopen van t = 2*macht-1 tot macht
 		vector<int> temp(fix);//verschuifregel kopieren
-
+		
 		//coeffiënt
 		for (int i =0 ; i < temp.size() ; i++){
 			temp[i] *= result[0];//t moet op nul beginnen
@@ -151,10 +150,11 @@ vector<int> maal(const vector<int> &een,const vector<int> &twee){
 			temp = maalAlfa(temp);
 		}
 
-		//result[0] moet weg, mogelijks niet de beste manier
+		//result[0] moet weg
 		result.erase(result.begin());
+		//result[t] = 0; //coef van t is nu nul
 		//optellen
-		result = telOp(result,temp);
+		telOp(result,temp);
 	}
 	return result;
 }

@@ -40,4 +40,4 @@ int main(int argc, char** argv){
 
 bool alsdan(const bool p,const bool q){
 	return q || !(p||q);
-}
+}so
