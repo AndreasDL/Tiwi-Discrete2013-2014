@@ -1,0 +1,83 @@
+%\"
+
+%\newcommand{\Br}[2]{\displaystyle\frac{#1}{#2}}
+\documentclass[11pt]{article}
+\usepackage{a4wide}
+\usepackage[dutch]{babel}
+\usepackage{framed}
+\usepackage{fancyvrb}
+%\usepackage[dvips]{graphicx}
+%
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+\pagestyle{plain}
+%
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{26cm}
+%\setlength{\topmargin}{0.5cm}
+%\setlength{\headheight}{0.3cm}
+%\setlength{\headsep}{0cm}
+%\setlength{\oddsidemargin}{0.5cm}
+%%\setlength{\marginparsep}{0cm}
+%\setlength{\marginparwidth}{0cm}
+\addtolength{\hoffset}{-1.5cm}
+\addtolength{\voffset}{-2cm}
+
+\begin{document}
+
+\begin{center}
+\vspace{-4mm}{Discr Wisk \hfill\bf Eindige velden: vorderingen programmeeroefening \hfill 20 febr 2014}
+\end{center}
+\hrule
+Naam: \\\phantom{x}
+\hrule
+
+\begin{itemize}
+\item Welke software / talen gebruik je?
+\begin{Verbatim}[frame=single]
+Ik heb gekozen voor c++.
+\end{Verbatim}
+
+\item Wat moet de gebruiker ingeven indien hij informatie over het veld GF(8) wil verkrijgen? (Antwoord met getallen.)
+\begin{Verbatim}[frame=single]
+Het programme vraagt een priemgetal en een macht. 
+sVoor GF(8) moet er dus het priemgetal 2 en de macht 3 ingegeven worden.
+De verschuivingsfunctie wordt coefficient per coefficient opgevraagd.
+\end{Verbatim}
+
+\item Hoe wordt een element van het veld intern bewaard? Gebruik je verschillende voorstellingen voor een element van het veld (of switch je tussen notaties), 
+geef dan alle (container-)types waaronder je een element van het veld bewaart. Tip: geef het voorbeeld voor twee elementen uit GF(8). 
+\begin{Verbatim}[frame=single]
+Een getal wordt intern ogeslagen in de {1 ,1} - notatie.
+Dit gebeurd door middel van een vector<int> intern bewaard.
+De tabellen zelf worden direct weggeschreven naar stdout.
+\end{Verbatim}
+
+\item Wat krijgt de gebruiker als output te zien? Concreet: schrijf de output voor GF(4) volledig uit. (Zie cursusnota's om rekenwerk uit te sparen?)
+\begin{Verbatim}[frame=single]
+de plustabel en daaronder de maaltabel.
+
+\end{Verbatim}
+
+\item Welke berekeningen / omzettingen heb je allemaal nodig in je programma? Omschrijf bondig en duidelijk. Mag aan de hand van een voorbeeld.
+(Antwoord op de achterkant van het blad.)
+
+\begin{Verbatim}[frame=single]
+Zie ook code.
+- Een functie ontbind die een getal omzet naar de gebruikte notatie.
+Dit wordt gedaan door telkens de rest te bereken van de deling met het priemgetal.
+
+- Een functie telOp die 2 vectoren optelt en de rest berekent per dimensie.
+Deze functie zal de vector aanvullen 
+Een functie plustabel die de plustabel berekent en uitschrijft naar het scherm.
+Een functie maal die het product van 2 getallen berekent.
+Vervolgens zal deze functie herhaaldelijk de verschuifregel toe passen.
+Een functie maalAlfa die gebruikt wordt om de verschuifregel
+met alfa te vermenigvuldigen.
+Een functie print die een getal wegschrijft naar stdout.
+
+\end{Verbatim}
+
+\end{itemize}
+%
+\end{document}
