@@ -4,19 +4,21 @@
 #include <iomanip>
 using namespace std;
 
-int priem = 2;
+int priem = 3;
 int macht = 3;
 int maxaantal = priem;//macht uitrekenen in main
 vector<int> fix;
 
-void print(const vector<int> &t);
+int opbind(const vector<int> &getal);
 vector<int> ontbind(int getal);
 vector<int> maal(const vector<int> &een,const vector<int> &twee);
 vector<int> telOp(const vector<int> &een,const vector<int> &twee);
 vector<int> maalAlfa(const vector<int> &een);
 vector<int> maalGetal(const vector<int> &een,const int getal);
-void plusTab();
-void maalTab();
+bool plusTab(vector<vector<vector<int> > > &tab);
+bool maalTab(vector<vector<vector<int> > > &tab);
+void printTab(const char teken, const vector<vector<vector<int> > > &tab);
+void print(const vector<int> &t);
 
 int main(int argc, char** argv){
 	for (int i = 1 ; i < macht ; i++){
@@ -29,67 +31,96 @@ int main(int argc, char** argv){
 	cout << endl;
 
 	cout << "verschuifregel?";*/
-	fix.resize(macht);
-	fix[0] = 1;
-	fix[1] = 0;
-	fix[2] = 1;
-
+	//fix.resize(macht);
+	//fix[0] = 1;
+	//fix[1] = 0;
+	//fix[2] = 1;
 	/*int t;
 	for (int i = 0 ; i < macht; i++){
 		cin >> t;
 		fix[i] = t;
 	}*/
 
-	plusTab();
-	cout << endl;
-	maalTab();
-}
-
-void plusTab(){
-	cout << "Plustabel"<< endl;
-	cout << setw(6) << "+" << " |";
-	for (int i =0 ; i < maxaantal ; i++){
-		cout << setw(6) << i << " |";
+	//for each fix 
+	vector<vector<vector<int> > > mtab(maxaantal);
+	vector<vector<vector<int> > > ptab(maxaantal);
+	for (int poging = 0 ; poging < maxaantal ; poging++){
+		fix = ontbind(poging);
+		if (maalTab(mtab) && plusTab(ptab)){
+			cout << "Found one! ";
+			print(fix);
+			cout << endl;
+			/*
+			printTab('x',mtab);
+			printTab('+',ptab);*/
+		}	
 	}
-	cout << endl;
+}
+bool plusTab(vector<vector<vector<int> > > &tab){
+	bool isValid = true;
+	int i = 0;
+	int j;
+	vector<bool> isPresent(maxaantal);
 
-	for (int i = 0 ; i < maxaantal; i++){
-		cout << setw(6) << i << " | ";
+	while(i < maxaantal){
+		
+		tab[i].resize(maxaantal);
 		vector<int> een = ontbind(i);
-		for (int j = 0 ; j < maxaantal; j++){
-			//i+j
+		j = 0;		
+		//unieke waarden in rij => bijhouden welke getallen we al hebben.
+		for (int k =0 ; k < maxaantal; k++){
+			isPresent[k] = false;
+		}
+
+		while(j < maxaantal && isValid){
 			//omzetten
 			vector<int> twee = ontbind(j);
-			vector<int> temp = telOp(een,twee);
-			//uitschrijven
-			//cout << i  << " + " << j << " = ";
-			print(temp);
-			cout << "| ";
+			//calc and save
+			tab[i][j] = telOp(een,twee);
+			int h = opbind(tab[i][j]);
+			isValid = ( !isPresent[h] || j==0 || i==0 );//unique
+			isPresent[h] = true;
+			j++;
 		}
-		cout << endl;
-	}
-}
-void maalTab(){
-	cout << "Maaltabel"<< endl;
-	cout << setw(6) << "x" << " |";
-	for (int i =0 ; i < maxaantal ; i++){
-		cout << setw(6) << i << " |";
-	}
-	cout << endl;
 
-	for (int i = 0 ; i < maxaantal ; i++){
-		cout << setw(6) << i << " | ";
+		i++;
+	}
+	return isValid;
+}
+bool maalTab(vector<vector<vector<int> > > &tab){
+	//return true if table is valid
+	//table found in &tab;
+	bool isValid = true;
+	int i = 0;
+	int j;
+	vector<bool> isPresent(maxaantal);
+
+	while (i < maxaantal){
+		tab[i].resize(maxaantal);
 		vector<int> een = ontbind(i);
-		for (int j = 0 ; j < maxaantal ; j++){
+		j = 0;
+		
+		//unieke waarden in rij => bijhouden welke getallen we al hebben.
+		for (int k =0 ; k < maxaantal; k++){
+			isPresent[k] = false;
+		}
+
+		while(j < maxaantal && isValid){
 			//ontbind
 			vector<int> twee = ontbind(j);
 			//bereken
-			vector<int> result = maal(een,twee);
-			print(result);
-			cout << "| ";
+			tab[i][j] = maal(een,twee);
+
+			int h = opbind(tab[i][j]);//maar een keer onontbinden (opbinden dus)
+			isValid = ( ( !isPresent[h] && h != 0 ) || j==0 || i==0 );//unique & not zero
+
+			isPresent[h] = true;
+			j++;
 		}
-		cout << endl;
+
+		i++;
 	}
+	return isValid;
 }
 vector<int> ontbind(int getal){
 	//getal omzetten naar { 1 , 0 ,2 } notatie
@@ -104,6 +135,14 @@ vector<int> ontbind(int getal){
 		getal /= priem;
 		result[t] = rest;
 		t--;
+	}
+	return result;
+}
+int opbind(const vector<int> &getal){
+	int result = 0;
+	for (int i = 0 ; i < getal.size() ; i++){
+		result *= priem;
+		result += getal[i];
 	}
 	return result;
 }
@@ -172,4 +211,26 @@ void print(const vector<int> &t){
 	for (int i = 0 ; i < t.size() ; i++){
 		cout << t[i] << " ";
 	}
+}
+void printTab(const char teken,const vector<vector<vector<int> > > &tab){
+	if (teken == '+'){
+		cout << "Plustabel"<< endl;
+	}else{
+		cout << "Maaltabel" << endl;
+	}
+	cout << setw(macht*2) << teken << "|";
+	for (int i =0 ; i < maxaantal ; i++){
+		cout << setw(macht*2) << i << " |";
+	}
+	cout << endl;
+	
+	for (int i = 0; i < maxaantal;i++){
+		cout << setw(macht*2) << i << "| ";
+		for (int j = 0 ; j < maxaantal ; j++){
+			print(tab[i][j]);
+			cout << "| ";
+		}
+		cout << endl;
+	}
+	cout << endl;
 }
