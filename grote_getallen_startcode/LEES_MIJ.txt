@@ -1,0 +1,38 @@
+OPGAVE
+
+
+Implementeer de ontbrekende (lid)functies, 
+zodat grootgetal.cpp en residunotatie.cpp foutloos verlopen.
+
+
+
+	IN GROOTGETAL.H
+
+1.  GrootGetal GrootGetal::operator%(const GrootGetal & modulo)const;
+
+
+
+	IN REKENMACHINE.H (bekijk hiervoor het bestand 'formules_getallen_kort.txt')
+
+2.  template <typename T> T resultaat_van_berekening(const string & bestandsnaam);
+
+
+
+	IN HULPFUNCTIES.H
+
+3. 	bool los_vgl_in_Z_op(int,int,int,int&,int&,int&,int&);
+4. 	bool los_congruentie_op(int,int,int,int&);
+
+
+
+
+    IN RESIDUNOTATIE.H
+    
+5.	ResiduNotatie::ResiduNotatie(GrootGetal);
+6.  ResiduNotatie ResiduNotatie::operator+(const ResiduNotatie & ander)const;    
+7.  ResiduNotatie ResiduNotatie::operator*(const ResiduNotatie & ander)const;    
+8.  ResiduNotatie ResiduNotatie::operator*(int)const;    
+9.  GrootGetal ResiduNotatie::groot_getal() const;   // Chinese reststelling
+
+
+

@@ -5,7 +5,7 @@
 using namespace std;
 
 int priem = 3;
-int macht = 3;
+int macht = 5;
 int maxaantal = priem;//macht uitrekenen in main
 vector<int> fix;
 

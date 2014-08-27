@@ -46,12 +46,24 @@ class ResiduNotatie{
             // ... to do
 	
             // bereken de residu's 
+            GrootGetal grensGG(GRENS);
+			int huidigeModulus = GROOTSTE_MODULUS;
+			
+			while (product.is_kleiner_dan_abs(GRENS){
+				moduli.push_back(huidigeModulus);
+
+				GrootGetal g(huidigeModulus);
+				product = product * g;
+				cout << huidigeModulus << endl;
+			}
+
             
             // ... to do            						
 		}
 		
 		
-        ResiduNotatie():ResiduNotatie(GrootGetal()){        	
+        ResiduNotatie():ResiduNotatie(GrootGetal()){
+
         }		
 		ResiduNotatie(const string & a):ResiduNotatie(GrootGetal(a)){
 		}	
